@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<disqus xmlns="http://disqus.com" xmlns:dsq="http://disqus.com/disqus-internals"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://disqus.com/api/schemas/1.0/disqus.xsd
+                            http://disqus.com/api/schemas/1.0/internals.xsd"
+>
+
+    <!--
+      Categories must be declared at the top of a file. They only need declared once
+      per site, and DISQUS will attempt to validate them against existing data if they
+      are not present in the XML.
+
+    The `dsq` namespace is for internal usage by DISQUS and tends to hold things such
+      as internal identifiers for objects.
+
+    - `title` must be unqiue per `forum`
+      -->
+    <category dsq:id="1">
+        <forum>disqusdev</forum>
+        <title>Technology</title>
+    </category>
+
+    <!--
+      Threads must be declared after categories, and before posts. They only need declared once
+      per site, and DISQUS will attempt to validate them against existing data if they
+      are not present in the XML.
+
+    The `dsq` namespace is for internal usage by DISQUS and tends to hold things such
+      as internal identifiers for objects.
+
+    - `id` must be unqiue per `forum`
+      -->
+    <thread dsq:id="2">
+        <id>1</id>
+        <forum>disqusdev</forum>
+        <category dsq:id="1"/>
+        <link/>
+        <title/>
+        <message/>
+        <createdAt>2012-12-12T12:12:12</createdAt>
+        <author>
+            <name>Baz</name>
+            <email>foo@bar.com</email>
+        </author>
+    </thread>
+
+    <!--
+      Posts must be declared in a standard tree order. Parents should always exist before
+      they are referenced. DISQUS will attempt to validate them against existing data if
+      they are not present in the XML.
+
+    The `dsq` namespace is for internal usage by DISQUS and tends to hold things such
+      as internal identifiers for objects.
+
+    - `id` must be unqiue per `forum`
+      -->
+    <post dsq:id="1">
+        <id>2</id>
+        <message>Mother Russia</message>
+        <thread>1</thread>
+        <isSpam>true</isSpam>
+        <createdAt>2012-12-12T12:12:12</createdAt>
+        <ipAddress>127.0.0.1</ipAddress>
+        <author>
+            <name>Baz</name>
+            <email>foo@bar.com</email>
+        </author>
+    </post>
+    <post dsq:id="2">
+        <id>1</id>
+        <message>Yo dude</message>
+        <parent dsq:id="1">2</parent>
+        <thread>1</thread>
+        <createdAt>2012-12-12T12:12:12</createdAt>
+        <ipAddress>127.0.0.1</ipAddress>
+        <author>
+            <name>Baz</name>
+            <email>foo@bar.com</email>
+        </author>
+    </post>
+    <post>
+        <id>3</id>
+        <message/>
+        <thread dsq:id="2"/>
+        <createdAt>2012-12-12T12:12:12</createdAt>
+        <ipAddress>127.0.0.1</ipAddress>
+        <author>
+            <name>Baz</name>
+            <email>foo@bar.com</email>
+        </author>
+    </post>
+
+</disqus>
