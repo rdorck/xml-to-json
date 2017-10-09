@@ -1,3 +1,4 @@
 node_modules/
 .idea/
-phillydotcom-disqus.xml.gz
+tmp/
+disqus.xml

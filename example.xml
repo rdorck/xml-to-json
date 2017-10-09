@@ -13,7 +13,7 @@
     The `dsq` namespace is for internal usage by DISQUS and tends to hold things such
       as internal identifiers for objects.
 
-    - `title` must be unqiue per `forum`
+    - `title` must be unique per `forum`
       -->
     <category dsq:id="1">
         <forum>disqusdev</forum>
@@ -28,7 +28,7 @@
     The `dsq` namespace is for internal usage by DISQUS and tends to hold things such
       as internal identifiers for objects.
 
-    - `id` must be unqiue per `forum`
+    - `id` must be unique per `forum`
       -->
     <thread dsq:id="2">
         <id>1</id>
@@ -52,7 +52,7 @@
     The `dsq` namespace is for internal usage by DISQUS and tends to hold things such
       as internal identifiers for objects.
 
-    - `id` must be unqiue per `forum`
+    - `id` must be unique per `forum`
       -->
     <post dsq:id="1">
         <id>2</id>
