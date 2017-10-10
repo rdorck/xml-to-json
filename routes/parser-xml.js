@@ -1,12 +1,14 @@
-var express = require('express');
-var router = express.Router();
-var colors = require('colors');
-var fs = require('fs');
-var prettyjson = require('prettyjson');
-var xml2js = require('xml2js');
-var jsonfile = require('jsonfile');
-var json2csv = require('json2csv');
-var jq = require('node-jq');
+let express = require('express');
+let router = express.Router();
+let request = require('request');
+let rp = require('request-promise');
+let colors = require('colors');
+let fs = require('fs');
+let prettyjson = require('prettyjson');
+let xml2js = require('xml2js');
+let jsonfile = require('jsonfile');
+let json2csv = require('json2csv');
+let xmlStream = require('xml-stream');
 
 
 colors.setTheme({
@@ -17,6 +19,157 @@ colors.setTheme({
   error: 'red'
 });
 
+let prettyOptions = {
+  keysColor: 'cyan',
+  dashColor: 'magenta',
+  stringColor: 'yellow',
+  numberColor: 'white'
+};
+
+
+/**
+ * Convert Request data to stream then read stream
+ *  and convert to xml data
+ *
+ * @param link
+ */
+function streamXML (link) {
+  console.log('>>>> Starting stream of XML...'.action);
+
+  let writeStreamOptions = {
+    flags: 'wx',
+    defaultEncoding: 'utf8',
+    fd: null,
+    mode: 0o666,
+    autoClose: true
+  };
+
+  rp(link)
+  .then(function (results) {
+    console.log('\n>>>> Successfully got results from request-promise');
+  }).catch(function (err) {
+    console.log('\n>>>> Error request promise '.error);
+    console.log(err);
+  });
+
+  // var reqStream = request.get(link).pipe(fs.createWriteStream('./tmp/stream.xml', writeStreamOptions));
+  // reqStream.on('error', function (error) {
+  //   console.log('\n>> !! Error Streaming from ' + link + ''.error);
+  //   console.log(error);
+  // });
+  //
+  // reqStream.on('finish', function () {
+  //   console.log('\n>>>> Request finished <<<<'.success);
+  //   var readStream = fs.createReadStream('./tmp/stream.xml');
+  //   var xml = new xmlStream(readStream);
+  //   var writeStream = fs.createWriteStream('./tmp/stream.txt');
+  //
+  //   let postFields = [
+  //     'id',
+  //     'message',
+  //     'thread',
+  //     'isSpam',
+  //     'createdAt',
+  //     'ipAddress',
+  //     'author.name',
+  //     'author.email',
+  //     'parent'
+  //   ];
+  //
+  //   let topFields = ['disqus', 'category', 'thread', 'post'];
+  //   let allFields = [
+  //     'disqus',
+  //     'category',
+  //     'category.forum',
+  //     'category.title',
+  //     'thread',
+  //     'thread.id',
+  //     'thread.forum',
+  //     'thread.category',
+  //     'thread.link',
+  //     'thread.title',
+  //     'thread.message',
+  //     'thread.createdAt',
+  //     'thread.author',
+  //     'thread.author.name',
+  //     'thread.author.email',
+  //     'post',
+  //     'post.id',
+  //     'post.message',
+  //     'post.thread',
+  //     'post.isSpam',
+  //     'post.createdAt',
+  //     'post.ipAddress',
+  //     'post.author',
+  //     'post.author.name',
+  //     'post.author.email'
+  //   ];
+  //
+  //   writeStream.write(postFields.join('\t') + '\n');
+  //
+  //   xml.preserve('post');
+  //   xml.collect('post');
+  //   xml.on('endElement: post', function (post) {
+  //     console.log('\t>> Found post!'.rainbow);
+  //     var line = [];
+  //
+  //     postFields.forEach(function (field) {
+  //       line.push(post[field]);
+  //     });
+  //
+  //     console.log('Line'.yellow);
+  //     console.dir(line);
+  //     writeStream.write(line.join('\t') + '\n');
+  //   });
+  //
+  //   xml.on('end', function () {
+  //     writeStream.end();
+  //     console.log('\n**** Successfully completed xml stream ****'.success);
+  //   });
+  // });
+
+
+  // request.get(link)
+  // .on('error', function (err) {
+  //   console.log('\n>> !! Error Streaming from ' + link + ''.error);
+  //   console.log(err);
+  // })
+  // .on('response', function (response) {
+  //   console.log('**** Successful request response ****'.success);
+  //     var readStream = fs.createReadStream('./tmp/stream.xml');
+  //     var xml = new xmlStream(readStream);
+  //     var writeStream = fs.createWriteStream('./tmp/stream.txt');
+  //
+  //     var csvFields = [
+  //       'id',
+  //       'message',
+  //       'thread',
+  //       'isSpam',
+  //       'createdAt',
+  //       'ipAddress',
+  //       'author.name',
+  //       'author.email',
+  //       'parent'
+  //     ];
+  //
+  //     writeStream.write(csvFields.join('\t') + '\n');
+  //
+  //     xml.on('endElement: post', function (item) {
+  //       console.log('\t>> Found item ');
+  //     });
+  //
+  //     xml.on('end', function () {
+  //       writeStream.end();
+  //       console.log('\n**** Successfully completed xml stream ****'.success);
+  //     });
+  //   })
+  //   .pipe(fs.createWriteStream('./tmp/stream', writeStreamOptions))
+  //   .on('error', function (err) {
+  //     console.log('\n>> !! Error Piping !! <<'.error);
+  //     console.log(err.error);
+  //   });
+  // });
+}
 
 /**
  * Convert XML to Organized JSON
@@ -80,13 +233,16 @@ function xmlToJson (xml) {
  * @param data
  */
 function writeJsonFile (file, data) {
-  console.log('>>>> Writing JSON to ' + file + ' '.action);
-  jsonfile.writeFileSync(file, data, {}, function (err) {
+  console.log('>>>> Writing to JSON file...'.action);
+
+  let filePath = './tmp/' + file + '.json';
+  jsonfile.writeFile(filePath, data, function (err) {
     if (err) {
       console.log('\n>> !! Error writing JSON to file !! <<'.error);
       console.log(err);
     }
     console.log('\n>>>> Successfully wrote JSON to file!'.success);
+    return true;
   });
 }
 
@@ -126,27 +282,31 @@ function writeCsvFile (file, data) {
   var csvOptions = {
     data: data,
     fields: csvFields,
-    unwindPath: 'author'
-    //fieldNames: csvFieldNames
+    unwindPath: 'author',
+    fieldNames: csvFieldNames
   };
 
   var csv = json2csv(csvOptions);
+  let filePath = './tmp/' + file + '.csv';
 
-  fs.writeFileSync(file, csv, {}, function (err) {
+  fs.writeFile(filePath, csv, function (err) {
     if (err) {
       console.log('>> !! Error writing to CSV !! <<'.error);
       console.log(err);
     }
     console.log('>>>> Successfully wrote to CSV!'.success);
+    return true;
   });
 }
 
 
 /* Get Parsed XML Data */
 router.get('/', function (req, res, next) {
-  console.log('>>>> Reading XML file...'.action);
+  console.log('>>>> Getting Disqus Comments... Kick back, this could take a bit...'.action);
 
-  fs.readFile('./disqus.xml', function (err, xml) {
+  //streamXML('http://media.disqus.com/uploads/exports/phillydotcom-2017_09_20_17-00116457.xml.gz');
+
+  fs.readFile('./theory.xml', function (err, xml) {
     console.log('>>>> Successfully read file!'.success);
 
     var parserOptions = {
@@ -155,12 +315,14 @@ router.get('/', function (req, res, next) {
     };
 
     var parser = new xml2js.Parser(parserOptions);
-
     parser.parseString(xml, function (err, results) {
       if (err) {
         console.log('\n\t>> !! Error parsing XML string !! <<'.error);
         console.log(err.error);
       }
+      // console.log('\n>>>> RAW Parse String Results <<<<'.success);
+      // console.log(results);
+      // console.log('>>>> END RAW Results <<<<'.success);
 
       var postArray = results.disqus.post;
       var posts = JSON.stringify(postArray);
@@ -169,12 +331,6 @@ router.get('/', function (req, res, next) {
       console.log(posts.data);
       console.log('**** END Parse Results ****\n'.success);
 
-      var prettyOptions = {
-        keysColor: 'cyan',
-        dashColor: 'magenta',
-        stringColor: 'yellow',
-        numberColor: 'white'
-      };
       var prettyJson = prettyjson.render(posts, prettyOptions);
 
       console.log('\n>>>> JSON Results <<<<'.success);
@@ -182,11 +338,12 @@ router.get('/', function (req, res, next) {
       console.log('**** END JSON Results ****\n'.success);
 
       // Export to file
-      var file = './tmp/comments.csv';
-      //writeJsonFile(file, results);
+      var file = 'comments';
+
+      //writeJsonFile(file, postArray[0]);
       writeCsvFile(file, postArray);
 
-      res.send(JSON.stringify(results.disqus.post));
+      res.send(prettyJson);
     });
   });
 });

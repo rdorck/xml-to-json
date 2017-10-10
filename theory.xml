@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<disqus xmlns="http://disqus.com" xmlns:dsq="http://disqus.com/disqus-internals"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://disqus.com/api/schemas/1.0/disqus.xsd
+                            http://disqus.com/api/schemas/1.0/internals.xsd"
+>
+
+    <category dsq:id="2594574">
+        <forum>Forum</forum>
+        <title>Title</title>
+        <isDefault>true</isDefault>
+    </category>
+
+    <thread dsq:id="">
+        <id>1</id>
+        <forum />
+        <category>Theory Category</category>
+        <link />
+        <title>Theory Title</title>
+        <createdAt>2013-09-18T20:39:25Z</createdAt>
+        <author>
+            <name>trollster</name>
+            <email>troll@bar.com</email>
+        </author>
+    </thread>
+
+    <post dsq:id="">
+        <id>2</id>
+        <message>I am not a troll</message>
+        <thread>1</thread>
+        <isSpam>true</isSpam>
+        <createdAt>2012-12-12T12:12:12</createdAt>
+        <ipAddress>127.0.0.1</ipAddress>
+        <author>
+            <name>Troll</name>
+            <email>foo@bar.com</email>
+        </author>
+    </post>
+    <post dsq:id="2">
+        <id>1</id>
+        <message>Yo dude</message>
+        <parent dsq:id="1">2</parent>
+        <thread>1</thread>
+        <createdAt>2012-12-12T12:12:12</createdAt>
+        <ipAddress>127.0.0.1</ipAddress>
+        <author>
+            <name>Baz</name>
+            <email>foo@bar.com</email>
+        </author>
+    </post>
+    <post>
+        <id>3</id>
+        <message/>
+        <thread dsq:id="2"/>
+        <createdAt>2012-12-12T12:12:12</createdAt>
+        <ipAddress>127.0.0.1</ipAddress>
+        <author>
+            <name>Baz</name>
+            <email>foo@bar.com</email>
+        </author>
+    </post>
+</disqus>
