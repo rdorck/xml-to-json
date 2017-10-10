@@ -10,7 +10,7 @@ let jsonfile = require('jsonfile');
 let json2csv = require('json2csv');
 let xmlStream = require('xml-stream');
 
-
+// Set Console Colors
 colors.setTheme({
   action: 'rainbow',
   pending: 'yellow',
@@ -19,6 +19,7 @@ colors.setTheme({
   error: 'red'
 });
 
+// Set prettyjson Colors
 let prettyOptions = {
   keysColor: 'cyan',
   dashColor: 'magenta',
@@ -47,6 +48,8 @@ function streamXML (link) {
   rp(link)
   .then(function (results) {
     console.log('\n>>>> Successfully got results from request-promise');
+    console.log(results);
+    return results;
   }).catch(function (err) {
     console.log('\n>>>> Error request promise '.error);
     console.log(err);
@@ -299,53 +302,81 @@ function writeCsvFile (file, data) {
   });
 }
 
+/* Initial Entry Route; /parse */
+router.get('/example', function (req, res, next) {
+  console.log('>>>> Determining parser methods...');
+  let path = req.path;
+  let from = req.query.from;
+  let to = req.query.to;
+  console.log(`Converting ` + path.action + ': From - ' + from.action + ': To - ' + to.action);
+
+  if (from === 'xml' && to === 'json') {
+    console.log('\n>>>> Converting from XML to JSON...'.action);
+  }
+
+  if (from === 'json' && to === 'xml') {
+    console.log('\n>>>> Converting JSON to XML...'.action);
+  }
+});
 
 /* Get Parsed XML Data */
-router.get('/', function (req, res, next) {
+router.get('/xml', function (req, res, next) {
   console.log('>>>> Getting Disqus Comments... Kick back, this could take a bit...'.action);
 
   //streamXML('http://media.disqus.com/uploads/exports/phillydotcom-2017_09_20_17-00116457.xml.gz');
 
-  fs.readFile('./theory.xml', function (err, xml) {
-    console.log('>>>> Successfully read file!'.success);
-
-    var parserOptions = {
-      ignoreAttrs: true,
-      explicitArray: false
-    };
-
-    var parser = new xml2js.Parser(parserOptions);
-    parser.parseString(xml, function (err, results) {
-      if (err) {
-        console.log('\n\t>> !! Error parsing XML string !! <<'.error);
-        console.log(err.error);
-      }
-      // console.log('\n>>>> RAW Parse String Results <<<<'.success);
-      // console.log(results);
-      // console.log('>>>> END RAW Results <<<<'.success);
-
-      var postArray = results.disqus.post;
-      var posts = JSON.stringify(postArray);
-
-      console.log('\n>>>> Parse Results <<<<'.success);
-      console.log(posts.data);
-      console.log('**** END Parse Results ****\n'.success);
-
-      var prettyJson = prettyjson.render(posts, prettyOptions);
-
-      console.log('\n>>>> JSON Results <<<<'.success);
-      console.log(prettyJson);
-      console.log('**** END JSON Results ****\n'.success);
-
-      // Export to file
-      var file = 'comments';
-
-      //writeJsonFile(file, postArray[0]);
-      writeCsvFile(file, postArray);
-
-      res.send(prettyJson);
-    });
+  streamXML('https://www.w3schools.com/xml/note.xml')
+  .then(function (results) {
+    console.log('\n>>>> Successful streamXML!'.success);
+    console.log(results);
+    res.send('Done.');
+  })
+  .catch(function (error) {
+    console.log('\n!!!! Error executing streamXML !!!!'.error);
+    console.log(error.error);
   });
+
+
+  // fs.readFile('./theory.xml', function (err, xml) {
+  //   console.log('>>>> Successfully read file!'.success);
+  //
+  //   var parserOptions = {
+  //     ignoreAttrs: true,
+  //     explicitArray: false
+  //   };
+  //
+  //   var parser = new xml2js.Parser(parserOptions);
+  //   parser.parseString(xml, function (err, results) {
+  //     if (err) {
+  //       console.log('\n\t>> !! Error parsing XML string !! <<'.error);
+  //       console.log(err.error);
+  //     }
+  //     // console.log('\n>>>> RAW Parse String Results <<<<'.success);
+  //     // console.log(results);
+  //     // console.log('>>>> END RAW Results <<<<'.success);
+  //
+  //     var postArray = results.disqus.post;
+  //     var posts = JSON.stringify(postArray);
+  //
+  //     console.log('\n>>>> Parse Results <<<<'.success);
+  //     console.log(posts.data);
+  //     console.log('**** END Parse Results ****\n'.success);
+  //
+  //     var prettyJson = prettyjson.render(posts, prettyOptions);
+  //
+  //     console.log('\n>>>> JSON Results <<<<'.success);
+  //     console.log(prettyJson);
+  //     console.log('**** END JSON Results ****\n'.success);
+  //
+  //     // Export to file
+  //     var file = 'comments';
+  //
+  //     //writeJsonFile(file, postArray[0]);
+  //     //writeCsvFile(file, postArray);
+  //
+  //     res.send('Done.');
+  //   });
+  // });
 });
 
 

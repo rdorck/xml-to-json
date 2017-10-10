@@ -27,7 +27,28 @@ app.use(express.static(path.join(__dirname, 'tmp')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/xml', xmlRouter);
+app.use('/parse', xmlRouter);
+
+// TODO: Finish implementation for better organization and performance
+// app.use('/', function (req, res, next) {
+//   let path = req.path;
+//   let from = req.query.from;
+//   let to = req.query.to;
+//   console.log(`Converting ` + path.action + ': From - ' + from.action + ': To - ' + to.action);
+//
+//   if (req.path === '/disqus') {
+//     console.log('Testing route /disqus ...'.cyan);
+//   }
+//
+//   if (from === 'xml' && to === 'json') {
+//     console.log('\n>>>> Converting from XML to JSON...'.action);
+//   }
+//
+//   if (from === 'json' && to === 'xml') {
+//     console.log('\n>>>> Converting JSON to XML...'.action);
+//   }
+// });
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
