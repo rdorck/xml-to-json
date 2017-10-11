@@ -29,12 +29,22 @@ let prettyOptions = {
   numberColor: 'white'
 };
 
-let writeStreamOptions = {
-  flags: 'wx',
-  defaultEncoding: 'utf8',
-  fd: null,
-  mode: 0o666,
-  autoClose: true
+
+const jsonWrite = (author) => {
+  console.log('>>>> Writing to json file...'.pending);
+
+  let jsonFileOpts = {
+    space: 2,
+    flag: 'a'
+  };
+
+  jsonfile.writeFileSync('./tmp/authors.json', author, jsonFileOpts, function (err) {
+    if (err) {
+      console.log('\n!!!! Error writing to json file !!!!'.error);
+      console.log(err);
+    }
+    console.log('>>>> Successfully wrote to json file...'.success);
+  });
 };
 
 
@@ -50,10 +60,12 @@ function parseLargeStream (uri, verbose=false, debug=false) {
 
   reader.on('record', record => {
     console.log('\n>>>> Record Found <<<<'.success);
-    let author = {
+    var author = {
       name: record.children[0].text,
       email: record.children[1].text
     };
+
+    //jsonWrite(author);
 
     if (verbose) {
       console.log(JSON.stringify(author).cyan);
@@ -76,7 +88,7 @@ function parseLargeStream (uri, verbose=false, debug=false) {
 
 /* Router */
 router.get('/', function (req, res, next) {
-  parseLargeStream('./example.xml', true);
+  parseLargeStream('./disqus.xml', true);
   res.send('Done.');
 });
 
