@@ -29,22 +29,29 @@ let prettyOptions = {
   numberColor: 'white'
 };
 
+let writeStreamOptions = {
+  flags: 'wxa',
+  defaultEncoding: 'utf8',
+  fd: null,
+  mode: 0o666,
+  autoClose: true
+};
+
 
 const jsonWrite = (author) => {
   console.log('>>>> Writing to json file...'.pending);
-
-  let jsonFileOpts = {
-    space: 2,
-    flag: 'a'
-  };
-
-  jsonfile.writeFileSync('./tmp/authors.json', author, jsonFileOpts, function (err) {
+  let jsonFileOpts = {space: 2, flags: 'wxa'};
+  jsonfile.writeFile('./tmp/authors.json', author, jsonFileOpts, function (err) {
     if (err) {
       console.log('\n!!!! Error writing to json file !!!!'.error);
       console.log(err);
     }
     console.log('>>>> Successfully wrote to json file...'.success);
   });
+
+  // let outStream = fs.createWriteStream('./tmp/authors.json', writeStreamOptions);
+  // outStream.write(author);
+  // outStream.end();
 };
 
 
@@ -56,6 +63,9 @@ const jsonWrite = (author) => {
  * @param debug
  */
 function parseLargeStream (uri, verbose=false, debug=false) {
+  // NOTE - Regex a deeper (author/post) || just post
+  // TODO - Setup async/await
+
   let reader = bigXml.createReader(uri, /^(author)$/, { gzip: false });
 
   reader.on('record', record => {
@@ -65,7 +75,7 @@ function parseLargeStream (uri, verbose=false, debug=false) {
       email: record.children[1].text
     };
 
-    //jsonWrite(author);
+    jsonWrite(author);
 
     if (verbose) {
       console.log(JSON.stringify(author).cyan);
