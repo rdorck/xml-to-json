@@ -62,8 +62,8 @@
         <createdAt>2012-12-12T12:12:12</createdAt>
         <ipAddress>127.0.0.1</ipAddress>
         <author>
-            <name>Baz</name>
-            <email>foo@bar.com</email>
+            <name>riverRat</name>
+            <email>email@bar.com</email>
         </author>
     </post>
     <post dsq:id="2">
@@ -74,8 +74,8 @@
         <createdAt>2012-12-12T12:12:12</createdAt>
         <ipAddress>127.0.0.1</ipAddress>
         <author>
-            <name>Baz</name>
-            <email>foo@bar.com</email>
+            <name>Scummy</name>
+            <email>scum@foo.com</email>
         </author>
     </post>
     <post>

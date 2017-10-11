@@ -66,48 +66,7 @@ function streamXML (link) {
   //   var readStream = fs.createReadStream('./tmp/stream.xml');
   //   var xml = new xmlStream(readStream);
   //   var writeStream = fs.createWriteStream('./tmp/stream.txt');
-  //
-  //   let postFields = [
-  //     'id',
-  //     'message',
-  //     'thread',
-  //     'isSpam',
-  //     'createdAt',
-  //     'ipAddress',
-  //     'author.name',
-  //     'author.email',
-  //     'parent'
-  //   ];
-  //
-  //   let topFields = ['disqus', 'category', 'thread', 'post'];
-  //   let allFields = [
-  //     'disqus',
-  //     'category',
-  //     'category.forum',
-  //     'category.title',
-  //     'thread',
-  //     'thread.id',
-  //     'thread.forum',
-  //     'thread.category',
-  //     'thread.link',
-  //     'thread.title',
-  //     'thread.message',
-  //     'thread.createdAt',
-  //     'thread.author',
-  //     'thread.author.name',
-  //     'thread.author.email',
-  //     'post',
-  //     'post.id',
-  //     'post.message',
-  //     'post.thread',
-  //     'post.isSpam',
-  //     'post.createdAt',
-  //     'post.ipAddress',
-  //     'post.author',
-  //     'post.author.name',
-  //     'post.author.email'
-  //   ];
-  //
+
   //   writeStream.write(postFields.join('\t') + '\n');
   //
   //   xml.preserve('post');
@@ -128,48 +87,6 @@ function streamXML (link) {
   //   xml.on('end', function () {
   //     writeStream.end();
   //     console.log('\n**** Successfully completed xml stream ****'.success);
-  //   });
-  // });
-
-
-  // request.get(link)
-  // .on('error', function (err) {
-  //   console.log('\n>> !! Error Streaming from ' + link + ''.error);
-  //   console.log(err);
-  // })
-  // .on('response', function (response) {
-  //   console.log('**** Successful request response ****'.success);
-  //     var readStream = fs.createReadStream('./tmp/stream.xml');
-  //     var xml = new xmlStream(readStream);
-  //     var writeStream = fs.createWriteStream('./tmp/stream.txt');
-  //
-  //     var csvFields = [
-  //       'id',
-  //       'message',
-  //       'thread',
-  //       'isSpam',
-  //       'createdAt',
-  //       'ipAddress',
-  //       'author.name',
-  //       'author.email',
-  //       'parent'
-  //     ];
-  //
-  //     writeStream.write(csvFields.join('\t') + '\n');
-  //
-  //     xml.on('endElement: post', function (item) {
-  //       console.log('\t>> Found item ');
-  //     });
-  //
-  //     xml.on('end', function () {
-  //       writeStream.end();
-  //       console.log('\n**** Successfully completed xml stream ****'.success);
-  //     });
-  //   })
-  //   .pipe(fs.createWriteStream('./tmp/stream', writeStreamOptions))
-  //   .on('error', function (err) {
-  //     console.log('\n>> !! Error Piping !! <<'.error);
-  //     console.log(err.error);
   //   });
   // });
 }

@@ -9,6 +9,8 @@ var fs = require('fs');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var xmlRouter = require('./routes/parser-xml');
+let staffRouter = require('./routes/staff');
+let largeParser = require('./routes/large-parser');
 
 var app = express();
 
@@ -28,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'tmp')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/parse', xmlRouter);
+app.use('/staff', staffRouter);
+app.use('/big', largeParser);
 
 // TODO: Finish implementation for better organization and performance
 // app.use('/', function (req, res, next) {
