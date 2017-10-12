@@ -63,22 +63,29 @@ const jsonWrite = (author) => {
  * @param debug
  */
 function parseLargeStream (uri, verbose=false, debug=false) {
+  console.log('\n>>>> Reading large xml file...'.pending);
   // NOTE - Regex a deeper (author/post) || just post
   // TODO - Setup async/await
 
-  let reader = bigXml.createReader(uri, /^(author)$/, { gzip: false });
+  let reader = bigXml.createReader(uri, /^(post)$/, { gzip: false });
 
   reader.on('record', record => {
     console.log('\n>>>> Record Found <<<<'.success);
-    var author = {
-      name: record.children[0].text,
-      email: record.children[1].text
-    };
+    console.log(record);
 
-    jsonWrite(author);
+    // if (record.children[0].text == 'rmetente@philly.com') {
+    //
+    // }
+    //
+    // var author = {
+    //   name: record.children[0].text,
+    //   email: record.children[1].text
+    // };
+    //
+    // jsonWrite(author);
 
     if (verbose) {
-      console.log(JSON.stringify(author).cyan);
+      console.log(JSON.stringify(record).cyan);
     }
 
     if (debug) {
@@ -98,8 +105,25 @@ function parseLargeStream (uri, verbose=false, debug=false) {
 
 /* Router */
 router.get('/', function (req, res, next) {
-  parseLargeStream('./disqus.xml', true);
-  res.send('Done.');
+  console.log('\n**** Commence Parsing ****'.underline.success);
+
+  let reader = bigXml.createReader('./disqus.xml', /^(post)$/, {gzip: false});
+
+  reader.on('record', function (record) {
+    console.log('\n>>>> Start Record <<<<'.success);
+    console.log(record);
+    console.log(JSON.stringify(record).cyan);
+    console.log('>>>> End Record <<<<'.error);
+    res.send('Done.');
+  });
+
+  reader.on('error', function (error) {
+    console.log('\n!!!! Error on author reader !!!!'.error);
+    console.log(error);
+  });
+
+
+  //parseLargeStream('./disqus.xml', true);
 });
 
 module.exports = router;
