@@ -1,7 +1,16 @@
 {
-  "env": {
-    "development": {
-      "plugins": [""]
-    }
-  }
+  "presets": [
+    ["env", {
+      "include": [
+        ["transform-regenerator", {
+          "asyncGenerators": true,
+          "generators": true,
+          "async": true
+        }],
+        "syntax-async-functions",
+        "transform-async-to-generator",
+        "babel-polyfill"
+      ]
+    }]
+  ]
 }
