@@ -67,7 +67,7 @@ function parseLargeStream (uri, verbose=false, debug=false) {
   // NOTE - Regex a deeper (author/post) || just post
   // TODO - Setup async/await
 
-  let reader = bigXml.createReader(uri, /^(post)$/, { gzip: false });
+  let reader = bigXml.createReader(uri, /^(email)$/, { gzip: false });
 
   reader.on('record', record => {
     console.log('\n>>>> Record Found <<<<'.success);
@@ -107,7 +107,7 @@ function parseLargeStream (uri, verbose=false, debug=false) {
 router.get('/', function (req, res, next) {
   console.log('\n**** Commence Parsing ****'.underline.success);
 
-  let reader = bigXml.createReader('./disqus.xml', /^(post)$/, {gzip: false});
+  let reader = bigXml.createReader('./example.xml', /^(post)$/, {gzip: false});
 
   reader.on('record', function (record) {
     console.log('\n>>>> Start Record <<<<'.success);

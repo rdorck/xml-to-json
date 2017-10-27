@@ -12,7 +12,7 @@ let xmlRouter = require('./routes/parser-xml');
 let staffRouter = require('./routes/staff');
 let largeParser = require('./routes/large-parser');
 let disqusExpat = require('./routes/disqus-expat');
-let asyncParser = require('./routes/async-parser');
+let toText = require('./routes/to-txt');
 
 let app = express();
 
@@ -33,29 +33,29 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/parse', xmlRouter);
 app.use('/staff', staffRouter);
-app.use('/big', largeParser);
+app.use('/big', largeParser);  // Most complete
 app.use('/expat', disqusExpat);
-app.use('/parse/async', asyncParser);
+ app.use('/to-txt', toText);
 
 // TODO: Finish implementation for better organization and performance
-// app.use('/', function (req, res, next) {
-//   let path = req.path;
-//   let from = req.query.from;
-//   let to = req.query.to;
-//   console.log(`Converting ` + path.action + ': From - ' + from.action + ': To - ' + to.action);
-//
-//   if (req.path === '/disqus') {
-//     console.log('Testing route /disqus ...'.cyan);
-//   }
-//
-//   if (from === 'xml' && to === 'json') {
-//     console.log('\n>>>> Converting from XML to JSON...'.action);
-//   }
-//
-//   if (from === 'json' && to === 'xml') {
-//     console.log('\n>>>> Converting JSON to XML...'.action);
-//   }
-// });
+app.use('/', function (req, res, next) {
+  let path = req.path;
+  let from = req.query.from;
+  let to = req.query.to;
+  console.log(`Converting ` + path.action + ': From - ' + from.action + ': To - ' + to.action);
+
+  if (req.path === '/disqus') {
+    console.log('Testing route /disqus ...'.cyan);
+  }
+
+  if (from === 'xml' && to === 'json') {
+    console.log('\n>>>> Converting from XML to JSON...'.action);
+  }
+
+  if (from === 'json' && to === 'xml') {
+    console.log('\n>>>> Converting JSON to XML...'.action);
+  }
+});
 
 
 // catch 404 and forward to error handler
